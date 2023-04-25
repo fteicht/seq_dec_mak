@@ -1,11 +1,10 @@
-module load python/3.9
 python -m venv .env
-source .env/bin/activate
+.env\Scripts\activate.bat
 python -m pip install "pip==22"
 python -m pip install gym==0.21.0 --no-use-pep517
 python -m pip install --upgrade pip
-python -m pip install ray\[rllib\]==2.2.0
-python -m pip install scikit-decide\[all\]
+python -m pip install ray[rllib]==2.2.0
+python -m pip install scikit-decide[all]
 python -m pip install pygame
 python -m pip install folium
 python -m pip install pddlgym==0.0.4
