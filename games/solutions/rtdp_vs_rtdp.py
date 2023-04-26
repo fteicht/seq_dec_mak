@@ -1,52 +1,65 @@
 tic_tac_toe = TicTacToe(TIC_TAC_TOE)
 tic_tac_toe_tree = TicTacToeTree(tic_tac_toe)
 
-def opponent_policy(tree_node: Tree.Node,
-                    opponent_game_graph: ProbabilisticGameGraph) -> List[Tuple[float, Tree.Node]]:
-    if (opponent_game_graph is not None and
-        tree_node in opponent_game_graph._nodes and
-        opponent_game_graph.get_node(tree_node)._best_action is not None):
-        return [(1., opponent_game_graph.get_node(tree_node)._best_action.data[0])]
+
+def opponent_policy(
+    tree_node: Tree.Node,
+    opponent_pol: Dict[Tree.Node, Tuple[Tuple[Tree.Node, str], float]],
+) -> List[Tuple[float, Tree.Node]]:
+    if (
+        opponent_pol is not None
+        and tree_node in opponent_pol
+        and opponent_pol[tree_node][0][0] is not None
+    ):
+        return [(1.0, opponent_pol[tree_node][0][0])]
     else:
         num_samples = len(tic_tac_toe_tree.get_children(tree_node))
-        return [(1. / float(num_samples), n) for n, _ in tic_tac_toe_tree.get_children(tree_node)]
+        return [
+            (1.0 / float(num_samples), n)
+            for n, _ in tic_tac_toe_tree.get_children(tree_node)
+        ]
 
-def call_game_rtdp(game_tree: Tree,
-                   node: Tree.Node,
-                   opponent_game_graph: ProbabilisticGameGraph,
-                   max_value: float,
-                   max_or_min_player: bool) -> None:
-    game_graph = ProbabilisticGameGraph(
-        game_tree=game_tree,
-        opponent_policy=lambda tree_node : opponent_policy(tree_node, opponent_game_graph)
+
+def call_game_rtdp(
+    tree: Tree,
+    node: Tree.Node,
+    opponent_pol: Dict[Tree.Node, Tuple[Tuple[Tree.Node, str], float]],
+    max_value: float,
+    max_or_min_player: bool,
+) -> None:
+    domain_factory = lambda: ProbabilisticGameDomain(
+        tree,
+        node,
+        lambda tree_node: opponent_policy(tree_node, opponent_pol),
+        max_or_min_player,
     )
-    rtdp = GameRTDP(
-        graph=game_graph,
-        heuristic = lambda n : ((2 * int(max_or_min_player) - 1) * n.data.terminal_value
-                                if n.data.terminal else
-                                (2 * int(max_or_min_player) - 1) * max_value),
-        max_steps=1000,
-        trials_number=100,
-        verbose=False,
-        render=False)
-    rtdp.solve_from(node)
-    return game_graph
+    rtdp_factory = lambda: LRTDP(
+        domain_factory=domain_factory,
+        heuristic=lambda d, s: Value(reward=max_value)
+        if max_or_min_player
+        else Value(cost=max_value),
+        discount=1.0,
+        epsilon=0.001,
+        parallel=False,
+        debug_logs=False,
+    )
+    with rtdp_factory() as rtdp:
+        ProbabilisticGameDomain.solve_with(rtdp, domain_factory)
+        node._best_child = rtdp.sample_action(node)
+        policy = rtdp.get_policy()
+
+    return policy
+
 
 node = tic_tac_toe_tree.get_node(data=tic_tac_toe.reset())
 tic_tac_toe.render(node.data)
-current_game_graph = None
+current_opponent_policy = None
 
 while not node.terminal:
-    print('Player {}\'s turn'.format(
-        'Cross' if node.max_player else 'Circle'
-    ))
-    current_game_graph = call_game_rtdp(
-        tic_tac_toe_tree,
-        node,
-        current_game_graph,
-        1,
-        node.max_player
+    print("Player {}'s turn".format("Cross" if node.max_player else "Circle"))
+    current_opponent_policy = call_game_rtdp(
+        tic_tac_toe_tree, node, current_opponent_policy, 1, node.max_player
     )
-    
+
     node = node.best_child[0]
     tic_tac_toe.render(node.data)
