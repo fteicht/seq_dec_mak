@@ -16,7 +16,7 @@ def alphabeta(node : Tree.Node,
             if tentative >= value:
                 node._best_child = child
                 value = tentative
-            if value >= beta:
+            if value > beta:
                 break
             alpha = max(alpha, value)
         return value
@@ -27,7 +27,7 @@ def alphabeta(node : Tree.Node,
             if tentative <= value:
                 node._best_child = child
                 value = tentative
-            if value <= alpha:
+            if value < alpha:
                 break
             beta = min(beta, value)
         return value
