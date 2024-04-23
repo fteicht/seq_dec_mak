@@ -62,7 +62,7 @@ class FlightGraphWithWind(FlightGraph):
             dir_speed = mu + sqrt(phi)
             assert dir_speed > 0
             flown_distance = (
-                WIND_SPEED * sqrt(dir_a * dir_a + dir_b * dir_b) / dir_speed
+                AIRCRAFT_SPEED * sqrt(dir_a * dir_a + dir_b * dir_b) / dir_speed
             )
             yield (
                 Graph.Node(data=nwp, parent=node),

@@ -80,7 +80,7 @@ class Astar:
                     if node.parent is not None:
                         path.insert(0, (node.parent, label))
                     node = node.parent
-                break  # return path, dist, enqueued[curnode][0], len(enqueued)
+                break  # return dist, path
             if curnode in explored:
                 continue
             explored[curnode] = label

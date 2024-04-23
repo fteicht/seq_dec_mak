@@ -1,5 +1,3 @@
-![Flight planning with wind](flight_planning_with_wind.png)
-
 We first need to compute the coordinates of the direction vector, i.e. the vector linking two successive waypoints, by using [trigonometric formulas](https://en.wikipedia.org/wiki/Local_tangent_plane_coordinates) in the Earth sphere.
 
 We note:
