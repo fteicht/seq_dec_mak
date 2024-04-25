@@ -45,7 +45,7 @@ class Connect4Tree(Tree):
     
     def generate_children(self, node: Tree.Node) -> List[Tuple[Tree.Node, str]]:
         connect4 = Connect4()
-        connect4.board = node.data.board
+        connect4.board = node.data.board.copy()
         
         for action in connect4.legal_actions():
             connect4.player =  2 * int(node.max_player) -1
