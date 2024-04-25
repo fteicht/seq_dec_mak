@@ -16,7 +16,7 @@ def expectiminimax(
                 cc[2] * expectiminimax(cc[0], tree, depth - 1, False, evaluate)
                 for cc in child[0]._children
             )
-            if tentative >= value:
+            if tentative > value:
                 node._best_child = child
                 value = tentative
         return value
@@ -27,7 +27,7 @@ def expectiminimax(
                 cc[2] * expectiminimax(cc[0], tree, depth - 1, True, evaluate)
                 for cc in child[0]._children
             )
-            if tentative <= value:
+            if tentative < value:
                 node._best_child = child
                 value = tentative
         return value

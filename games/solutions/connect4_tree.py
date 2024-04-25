@@ -79,7 +79,7 @@ class Connect4Tree(Tree):
             
         if self._ax is None:
             fig, ax = plt.subplots(1)
-            fig.canvas.set_window_title("connect-4")
+            # fig.canvas.set_window_title("connect-4")
             ax.set_aspect("equal")  # set the x and y axes to the same scale
             plt.xticks([])  # remove the tick marks by setting to an empty list
             plt.yticks([])  # remove the tick marks by setting to an empty list
