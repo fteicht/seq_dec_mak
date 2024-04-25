@@ -11,7 +11,7 @@ def minimax(node : Tree.Node,
         value = -float('inf')
         for child in tree.get_children(node):
             tentative = minimax(child[0], tree, depth - 1, False, evaluate)
-            if tentative >= value:
+            if tentative > value:
                 node._best_child = child
                 value = tentative
         return value
@@ -19,7 +19,7 @@ def minimax(node : Tree.Node,
         value = float('inf')
         for child in tree.get_children(node):
             tentative = minimax(child[0], tree, depth - 1, True, evaluate)
-            if tentative <= value:
+            if tentative < value:
                 node._best_child = child
                 value = tentative
         return value

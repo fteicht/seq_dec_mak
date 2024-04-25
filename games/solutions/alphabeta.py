@@ -1,5 +1,6 @@
 from typing import Callable
 
+# This is the fail-soft version of the alpha-beta algorithm
 def alphabeta(node : Tree.Node,
               tree: Tree,
               depth : int,
@@ -13,21 +14,21 @@ def alphabeta(node : Tree.Node,
         value = -float('inf')
         for child in tree.get_children(node):
             tentative = alphabeta(child[0], tree, depth - 1, alpha, beta, False, evaluate)
-            if tentative >= value:
+            if tentative > value:
                 node._best_child = child
                 value = tentative
-            if value > beta:
-                break
             alpha = max(alpha, value)
+            if value >= beta:
+                break
         return value
     else:
         value = float('inf')
         for child in tree.get_children(node):
             tentative = alphabeta(child[0], tree, depth - 1, alpha, beta, True, evaluate)
-            if tentative <= value:
+            if tentative < value:
                 node._best_child = child
                 value = tentative
-            if value < alpha:
-                break
             beta = min(beta, value)
+            if value <= alpha:
+                break
         return value
