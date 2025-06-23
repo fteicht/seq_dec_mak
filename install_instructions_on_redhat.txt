@@ -1,7 +1,10 @@
-module load python/3.7
-python -m venv ~/.local/venvs/seq_dec_mak
-source ~/.local/venvs/seq_dec_mak/bin/activate
+module load anaconda3/2024
+conda create -n aibt108 python=3.12
+conda activate aibt108
+conda install jupyterlab
+export http_proxy=http://proxy.isae.fr:3128
+export https_proxy=http://proxy.isae.fr:3128
 pip install --upgrade pip
-pip install jupyter
-python -m ipykernel install --user --name=seq_dec_mak
-jupyter notebook
+pip install "scikit-decide[all]"
+python -m ipykernel install --user --name=aibt108
+jupyter lab
