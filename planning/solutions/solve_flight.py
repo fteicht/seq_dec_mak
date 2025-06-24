@@ -1,6 +1,9 @@
+def flight_graph_heuristic(flight_graph, n):
+    return flight_graph.compute_great_circle_distance(n.data, flight_graph.arrival)
+    
 astar = Astar(
     flight_graph,
-    lambda n : FlightGraph.compute_great_circle_distance(n.data, flight_graph.arrival),
+    lambda n : flight_graph_heuristic(flight_graph, n),
     verbose=False,
     render=False  # set to true if you want visual rendering of the search
 )

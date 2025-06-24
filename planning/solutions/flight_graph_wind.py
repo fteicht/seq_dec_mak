@@ -1,6 +1,6 @@
 AIRCRAFT_SPEED = 500
 WIND_SPEED = 50
-WIND_DIRECTION = 180  # wind direction in the tangential plane
+WIND_DIRECTION = 90  # wind direction in the tangential plane
 
 
 class FlightGraphWithWind(FlightGraph):
