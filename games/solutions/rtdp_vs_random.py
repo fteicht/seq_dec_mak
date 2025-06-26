@@ -21,7 +21,7 @@ def call_game_rtdp(
         debug_logs=False,
     )
     with rtdp_factory() as rtdp:
-        ProbabilisticGameDomain.solve_with(rtdp, domain_factory)
+        rtdp.solve()
         node._best_child = rtdp.sample_action(node)
 
 
